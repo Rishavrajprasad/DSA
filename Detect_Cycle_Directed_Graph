@@ -1,0 +1,28 @@
+class Solution {
+    // Function to detect cycle in a directed graph.
+    public boolean isCyclic(int V, ArrayList<ArrayList<Integer>> adj) {
+        // code here
+        List<Boolean> visited = new ArrayList<>(Collections.nCopies(V, false));
+        List<Boolean> isRecursion = new ArrayList<>(Collections.nCopies(V,false));
+         for (int i = 0; i < V; i++) {
+            if (!visited.get(i) && DFS(adj, i, visited, isRecursion)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    private boolean DFS(ArrayList<ArrayList<Integer>> adj, int u, List<Boolean> visited,List<Boolean> isRecursion)
+    {
+        visited.set(u,true);
+        isRecursion.set(u,true);
+        for(int v: adj.get(u))
+        {
+            if(visited.get(v) ==false && DFS(adj,v,visited,isRecursion))
+            return true;
+            else if(isRecursion.get(v) == true)
+            return true;
+        }
+        isRecursion.set(u,false);
+        return false;
+    }
+}
