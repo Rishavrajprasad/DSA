@@ -1,0 +1,30 @@
+class Solution {
+    public boolean isCycle(int V, ArrayList<ArrayList<Integer>> adj) {
+        List<Boolean> visited = new ArrayList<>(Collections.nCopies(V, false));
+        for (int i = 0; i < V; i++) {
+            if (!visited.get(i) && DFS(adj, i, -1, visited)) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    public boolean DFS(ArrayList<ArrayList<Integer>> adj, int u, int parent, List<Boolean> visited) {
+        visited.set(u, true);
+        
+        for (int v : adj.get(u)) {
+            if (v == parent) {
+                continue;
+            }
+            if (visited.get(v)) {
+                return true; 
+            }
+            if (DFS(adj, v, u, visited)) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+}
