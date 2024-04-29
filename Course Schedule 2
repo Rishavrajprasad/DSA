@@ -1,0 +1,74 @@
+import java.util.*;
+
+class Solution {
+    boolean hasCycle = false; // This variable will help us keep track if we find a cycle in the courses
+
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        // Initialize a list to represent each course and its prerequisites
+        List<List<Integer>> adj = new ArrayList<>();
+        
+        // Create a list for each course (from 0 to numCourses-1)
+        for (int i = 0; i < numCourses; i++) {
+            adj.add(new ArrayList<>()); // Each course's list starts empty
+        }
+
+        // Fill in the prerequisites for each course
+        for (int[] prerequisite : prerequisites) {
+            int from = prerequisite[1]; // Course that needs to be taken first
+            int to = prerequisite[0];   // Course that depends on the prerequisite
+            adj.get(from).add(to);      // Add 'to' course as a prerequisite for 'from' course
+        }
+
+        // Create lists to keep track of visited courses and recursion status
+        List<Boolean> visited = new ArrayList<>(Collections.nCopies(numCourses, false));
+        List<Boolean> inRecursion = new ArrayList<>(Collections.nCopies(numCourses, false));
+
+        // Prepare an array to store the order of courses
+        int[] result = new int[numCourses];
+        
+        // Use a stack to help with ordering courses
+        Stack<Integer> stack = new Stack<>();
+
+        // Explore each course to find the order they should be taken
+        for (int i = 0; i < numCourses; i++) {
+            if (!visited.get(i)) { // If the course hasn't been visited yet
+                DFS(adj, i, visited, inRecursion, stack); // Start exploring from this course
+            }
+        }
+
+        // If we found a cycle, return an empty array because we can't order the courses
+        if (hasCycle) {
+            return new int[0];
+        }
+
+        // Populate the result array with the ordered courses from the stack
+        int j = 0;
+        while (!stack.isEmpty()) {
+            result[j++] = stack.pop(); // Take courses from the top of the stack into the result array
+        }
+
+        // Return the ordered courses
+        return result;
+    }
+
+    // Depth-First Search (DFS) function to explore courses and detect cycles
+    private void DFS(List<List<Integer>> adj, int u, List<Boolean> visited,
+                     List<Boolean> inRecursion, Stack<Integer> stack) {
+        visited.set(u, true);       // Mark the current course as visited
+        inRecursion.set(u, true);   // Mark the course as currently being explored
+
+        // Explore each course that depends on the current course ('u')
+        for (int v : adj.get(u)) {
+            if (inRecursion.get(v)) { // If we find a course that's already being explored
+                hasCycle = true;       // We've detected a cycle in the course dependencies
+                return;                // Stop exploring further to avoid getting stuck in a cycle
+            }
+            if (!visited.get(v)) {     // If we haven't visited this course yet
+                DFS(adj, v, visited, inRecursion, stack); // Recursively explore this course
+            }
+        }
+
+        stack.push(u);               // Add the current course to the stack after exploring its dependencies
+        inRecursion.set(u, false);   // Mark the current course as no longer being explored
+    }
+}
