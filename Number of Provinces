@@ -1,38 +1,61 @@
+// DFS Method
 class Solution {
-
-    // This method finds the number of connected groups of cities.
     public int findCircleNum(int[][] isConnected) {
-        // Create an array to keep track of visited cities.
         boolean[] visited = new boolean[isConnected.length];
-        // Initialize the count of connected groups.
         int count = 0;
-
-        // Loop through each city.
-        for (int i = 0; i < isConnected.length; i++) {
-            // If the city hasn't been visited yet:
-            if (!visited[i]) {
-                // Use depth-first search (dfs) to explore all connected cities.
-                dfs(isConnected, i, visited);
-                // Increase the count of connected groups.
+        for (int i = 0; i<isConnected.length; i++)
+        {
+            if(!visited[i])
+            {
+                dfs(isConnected,i,visited);
                 count++;
             }
         }
-        // Return the total count of connected city groups.
         return count;
     }
-
-    // This method performs depth-first search (dfs) to explore connected cities.
-    private void dfs(int[][] isConnected, int u, boolean[] visited) {
-        // Mark the current city as visited.
+    private void dfs(int[][] isConnected, int u, boolean[] visited)
+    {
         visited[u] = true;
-
-        // Check all cities to see if they are connected to the current city (u).
-        for (int v = 0; v < isConnected.length; v++) {
-            // If city v is not visited and is connected to city u:
-            if (!visited[v] && isConnected[u][v] == 1) {
-                // Recursively perform dfs on city v.
-                dfs(isConnected, v, visited);
-            }
+        for(int v=0 ; v<isConnected.length;v++)
+        {
+            if(!visited[v] && isConnected[u][v] == 1)
+            dfs(isConnected,v,visited);
         }
     }
 }
+
+
+// BFS Method
+
+// class Solution
+// {
+//     public int findCircleNum(int[][] isConnected) {
+//         boolean visited[] = new boolean[isConnected.length];
+//         int count =0;
+//         for (int i = 0; i<isConnected.length; i++)
+//         {
+//             if(!visited[i])
+//             {
+//                 bfs(isConnected,i,visited);
+//                 count++;
+//             }
+//         }
+//         return count;
+//     }
+//     private void bfs(int[][] isConnected, int start, boolean[] visited) {
+//     Queue<Integer> queue = new LinkedList<>(); 
+//     queue.offer(start); 
+//     visited[start] = true; 
+
+//     while (!queue.isEmpty()) {
+//         int currentNode = queue.poll(); 
+
+//         for (int neighbor = 0; neighbor < isConnected.length; neighbor++) {
+//             if (isConnected[currentNode][neighbor] == 1 && !visited[neighbor]) {
+//                 queue.offer(neighbor); 
+//                 visited[neighbor] = true; 
+//             }
+//         }
+//     }
+// }
+// }
