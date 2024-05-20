@@ -20,3 +20,31 @@ class Solution {
         return list;
     }
 }
+
+
+// Using Recursion to solve this problem (optimal solution)
+
+class Solution {
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        if(root == null)
+        return new ArrayList<>();
+
+        List<List<Integer>> result = new ArrayList<>();
+
+        DFS(root, result, 0);
+        return result;
+    }
+
+    private void DFS(TreeNode root, List<List<Integer>> result, int level)
+    {
+        if(result.size() == level)
+        result.add(new ArrayList<>());
+
+        result.get(level).add(root.val);
+
+        if(root.left !=null)
+        DFS(root.left,result,level+1);
+        if(root.right !=null)
+        DFS(root.right,result,level+1);
+    }
+}
