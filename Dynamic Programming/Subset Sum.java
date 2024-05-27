@@ -26,3 +26,43 @@ static Boolean isSubsetSum(int N, int arr[], int sum){
             }
         }
         return t[N][sum];
+}
+
+
+
+//  Recursion + memo
+class Solution{
+
+    static Boolean t[][];
+    static Boolean isSubsetSum(int N, int arr[], int sum){
+        // code here7
+         t = new Boolean[N+1][sum+1];
+        for(int i = 0; i < N+1; i++) {
+            for(int j = 0; j < sum+1; j++) {
+                t[i][j] = null;
+            }
+        }
+        return solve(N,arr,sum);
+    }
+    
+    static boolean solve(int N, int arr[], int sum) {
+        // Base cases
+        if(sum == 0)
+            return true;
+        if(N == 0)
+            return false;
+        
+        // Check if solution already computed
+        if(t[N][sum] != null)
+            return t[N][sum];
+        
+        // Choice diagram
+        if(arr[N-1] <= sum) {
+            t[N][sum] = solve(N-1, arr, sum-arr[N-1]) || solve(N-1, arr, sum);
+        } else {
+            t[N][sum] = solve(N-1, arr, sum);
+        }
+        
+        return t[N][sum];
+    }
+}
