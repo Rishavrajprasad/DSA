@@ -1,0 +1,46 @@
+class Solution {
+    static int mod = 1_000_000_007;
+
+    public static int countPartitions(int n, int d, int[] arr) {
+        int totalSum = 0;
+        for (int num : arr)
+            totalSum += num;
+
+        if ((d + totalSum) % 2 != 0)
+            return 0;
+
+        int sum1 = (d + totalSum) / 2;
+
+        if (sum1 > totalSum)
+            return 0;
+
+        return countSubsetSum(n, arr, sum1);
+    }
+
+    public static int countSubsetSum(int n, int[] arr, int sum) {
+        int[][] t = new int[n + 1][sum + 1];
+
+        for (int i = 0; i <= n; i++) {
+            for (int j = 0; j <= sum; j++) {
+                if (i == 0) {
+                    t[i][j] = 0;
+                }
+                if (j == 0) {
+                    t[i][j] = 1;
+                }
+            }
+        }
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = 0; j <= sum; j++) {
+                if (arr[i - 1] > j) {
+                    t[i][j] = t[i - 1][j];
+                } else {
+                    t[i][j] = (t[i - 1][j] + t[i - 1][j - arr[i - 1]]) % mod;
+                }
+            }
+        }
+
+        return t[n][sum];
+    }
+}
